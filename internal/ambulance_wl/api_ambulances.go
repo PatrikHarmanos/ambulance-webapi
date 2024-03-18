@@ -27,6 +27,9 @@ type AmbulancesAPI interface {
     // DeleteAmbulance - Deletes specific ambulance
    DeleteAmbulance(ctx *gin.Context)
 
+    // GetAmbulance - Gets specific ambulance
+   GetAmbulance(ctx *gin.Context)
+
 }
 
 // partial implementation of AmbulancesAPI - all functions must be implemented in add on files
@@ -41,6 +44,7 @@ func newAmbulancesAPI() AmbulancesAPI {
 func (this *implAmbulancesAPI) addRoutes(routerGroup *gin.RouterGroup) {
   routerGroup.Handle( http.MethodPost, "/ambulance", this.CreateAmbulance)
   routerGroup.Handle( http.MethodDelete, "/ambulance/:ambulanceId", this.DeleteAmbulance)
+  routerGroup.Handle( http.MethodGet, "/ambulance/:ambulanceId", this.GetAmbulance)
 }
 
 // Copy following section to separate file, uncomment, and implement accordingly
@@ -51,6 +55,11 @@ func (this *implAmbulancesAPI) addRoutes(routerGroup *gin.RouterGroup) {
 //
 // // DeleteAmbulance - Deletes specific ambulance
 // func (this *implAmbulancesAPI) DeleteAmbulance(ctx *gin.Context) {
+//  	ctx.AbortWithStatus(http.StatusNotImplemented)
+// }
+//
+// // GetAmbulance - Gets specific ambulance
+// func (this *implAmbulancesAPI) GetAmbulance(ctx *gin.Context) {
 //  	ctx.AbortWithStatus(http.StatusNotImplemented)
 // }
 //

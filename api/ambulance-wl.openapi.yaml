@@ -272,6 +272,24 @@ paths:
           description: Item deleted
         "404":
           description: Ambulance with such ID does not exist
+    get:
+      tags:
+        - ambulances
+      summary: Gets specific ambulance
+      operationId: getAmbulance
+      description: Use this method to get the specific ambulance from the system.
+      parameters:
+        - in: path
+          name: ambulanceId
+          description: pass the id of the particular ambulance
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Item returned
+        "404":
+          description: Ambulance with such ID does not exist
 components:
   schemas:
     WaitingListEntry:

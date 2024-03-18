@@ -132,3 +132,61 @@ func (this *implAmbulancesAPI) DeleteAmbulance(ctx *gin.Context) {
 			})
 	}
 }
+
+// GetAmbulance - Retrieves specific ambulance
+func (this *implAmbulancesAPI) GetAmbulance(ctx *gin.Context) {
+	value, exists := ctx.Get("db_service")
+	if !exists {
+		ctx.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"status":  "Internal Server Error",
+				"message": "db_service not found",
+				"error":   "db_service not found",
+			})
+		return
+	}
+
+	db, ok := value.(db_service.DbService[Ambulance])
+	if !ok {
+		ctx.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"status":  "Internal Server Error",
+				"message": "db_service context is not of type db_service.DbService",
+				"error":   "cannot cast db_service context to db_service.DbService",
+			})
+		return
+	}
+
+	ambulanceId := ctx.Param("ambulanceId")
+
+	ambulance, err := db.FindDocument(ctx, ambulanceId)
+
+	print(ambulance, err)
+
+	switch err {
+	case nil:
+		ctx.JSON(
+			http.StatusOK,
+			ambulance,
+		)
+	case db_service.ErrNotFound:
+		ctx.JSON(
+			http.StatusNotFound,
+			gin.H{
+				"status":  "Not Found",
+				"message": "Ambulance not found",
+				"error":   err.Error(),
+			},
+		)
+	default:
+		ctx.JSON(
+			http.StatusBadGateway,
+			gin.H{
+				"status":  "Bad Gateway",
+				"message": "Failed to load ambulance from database",
+				"error":   err.Error(),
+			})
+	}
+}
